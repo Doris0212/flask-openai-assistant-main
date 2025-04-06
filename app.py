@@ -15,13 +15,13 @@ def generate():
     prompt = request.form['prompt']
     response = openai.ChatCompletion.create(
         messages=[
-            {"role": "system", "content": "你是一位專業營養師，請針對食物名稱說出營養成分及合理的功效"},{"role": "user", "content":text1}
+            {"role": "user", "content": prompt}
         ],
         model="gpt-4o-mini-2024-07-18",
         temperature = 0.5,
     )
     generated_text = response['choices'][0]['message']['content'].strip()
-    return render_template('index1.html', response=generated_text)
+    return render_template('index.html', response=generated_text)
 
 if __name__ == '__main__':
     app.run(debug=True)
