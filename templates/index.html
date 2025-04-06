@@ -1,19 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI App with OpenAI API</title>
+    <title>黄金价格查询</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #gold-price {
+            margin-bottom: 20px;
+        }
+        #search-form {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <form action="/generate" method="post">
-        <textarea name="prompt" placeholder="Enter your prompt"></textarea>
-        <button type="submit">Generate</button>
+    <h1>今日黄金价格</h1>
+    <div id="gold-price">加载中...</div>
+
+    <h2>查询相关问题</h2>
+    <form id="search-form" action="https://www.google.com/search" method="get" target="_blank">
+        <input type="text" id="query" name="q" placeholder="输入关键词">
+        <input type="submit" value="搜索">
     </form>
-    {% if response %}
-    <div>
-        <p>{{ response }}</p>
-    </div>
-    {% endif %}
+
+    <script>
+        // 使用NowAPI获取黄金价格数据
+        const apiUrl = 'https://sapi.k780.com/?app=finance.gold_price&goldid=1051&appkey=您的APPKEY&sign=您的SIGN&format=json';
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === '1') {
+                    const goldData = data.result['1051'];
+                    const priceInfo = `
+                        品种：${goldData.varietynm}<br>
+                        当前价：${goldData.last_price} 元/克<br>
+                        买入价：${goldData.buy_price} 元/克<br>
+                        卖出价：${goldData.sell_price} 元/克<br>
+                        最高价：${goldData.high_price} 元/克<br>
+                        最低价：${goldData.low_price} 元/克<br>
+                        更新时间：${goldData.uptime}
+                    `;
+                    document.getElementById('gold-price').innerHTML = priceInfo;
+                } else {
+                    document.getElementById('gold-price').innerText = '获取黄金价格失败，请稍后重试。';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching gold price:', error);
+                document.getElementById('gold-price').innerText = '获取黄金价格失败，请稍后重试。';
+            });
+    </script>
 </body>
 </html>
