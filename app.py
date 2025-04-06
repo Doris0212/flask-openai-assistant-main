@@ -15,7 +15,7 @@ def generate():
     prompt = request.form['prompt']
     response = openai.ChatCompletion.create(
         messages=[
-            {"role": "system", "content": "You are a humorous person and output the entered keywords into humorus story."},{"role": "user", "content":text1}
+            {"role": "system", "content": "你是一位專業營養師，請針對食物名稱說出營養成分及合理的功效"},{"role": "user", "content":text1}
         ],
         model="gpt-4o-mini-2024-07-18",
         temperature = 0.5,
